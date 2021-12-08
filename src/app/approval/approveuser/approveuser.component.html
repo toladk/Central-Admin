@@ -1,0 +1,156 @@
+<style>
+  @keyframes loader-animation {
+     0% {
+         left: -100%;
+     }
+     49% {
+         left: 100%;
+     }
+     50% {
+         left: 100%;
+     }
+     100% {
+         left: -100%;
+     }
+ }
+ .loader {
+     height: 3px;
+     width: 100%;
+     overflow: hidden;
+ }
+ .loader .bar {
+     position: relative;
+     height: 5px;
+     width: 100%;
+     background-color: #57B952;
+     animation-name: loader-animation;
+     animation-duration: 3s;
+     animation-iteration-count: infinite;
+     animation-timing-function: ease-in-out;
+ }
+</style>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Approval</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/home/dashboard" style="color: #0D9448 !important;">
+                <i class="fas fa-home" style="color: #0D9448;"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item active">Approve Users</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-4">
+        <div class="card">
+          <div class="body">
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="ngxTableHeader">
+                  <ul class="header-buttons-left ml-0 mb-0">
+                    <li class="dropdown m-l-20">
+                      <label for="search-input"><i class="fas fa-search ml-2 search-icon mt-2"></i></label>
+                      <input placeholder="Search" [(ngModel)]="sortingName" (input)="SearchByName()" type="text"
+                       class="browser-default search-field" aria-label="Search box">
+                    </li>
+                  </ul>
+                  <ul class="header-buttons m-r-20">
+                    <li>
+                      <div class="icon-button-demo">
+                        <!-- <button mat-mini-fab color="primary" #tooltip="matTooltip" matTooltip="Add New Role" matTooltipPosition="before">
+                          <i class="fas fa-plus" style="color: #fff;"></i>
+                        </button> -->
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <!-- Loader -->
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 pl-0 pr-0 mx-auto mt-3">
+                  <div class="loader" *ngIf="loader">
+                    <div class="bar"></div>
+                  </div>
+                </div>
+                <!--End Loader-->
+                <div class="body table-responsive p-0 mt-3" *ngIf="allUnApproveUserList.length > 0">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th (click)="sort('username')" style="cursor: pointer;">User Name<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('email')" style="cursor: pointer;">Email<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('isApproved')" style="cursor: pointer;">Approval Status<i class="fas fa-sort ml-2"></i></th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let list of allUnApproveUserList | orderBy: key: reverse | paginate: {itemsPerPage: 15 , currentPage: pagination}; let i = index">
+                        <th scope="row">{{ i+1}}</th>
+                        <td>{{ list.username }}</td>
+                        <td>{{ list.email }}</td>
+                        <td>
+                          <span *ngIf="list.isApproved === false" class="badge bg-pink">Not Approved</span>
+                          <span *ngIf="list.isApproved === true" class="badge bg-teal">Approved</span>
+                        </td>
+                        <td>
+                          <div class="badge shadow-style col-green" style="cursor: pointer;" *ngIf="permissionList.indexOf('CANAPPROVEUSERS') > -1" (click)="approveUser(list)"><i class="fas fa-check mr-2"></i>Approve User</div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-4 mb-0">
+                    <div class="row d-flex">
+                      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-0">
+                        <p>Total Item: {{ allUnApproveUserList.length }}</p>
+                      </div>
+                      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-0">
+                        <pagination-controls (pageChange) = "pagination = $event" class="float-right"></pagination-controls>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="body table-responsive p-0 mt-3" *ngIf="allUnApproveUserList.length < 1">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th (click)="sort('username')" style="cursor: pointer;">User Name<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('email')" style="cursor: pointer;">Email<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('isApproved')" style="cursor: pointer;">Approval Status<i class="fas fa-sort ml-2"></i></th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td colspan="7" class="text-center"><div class="mt-3 mb-3 font-23"><h6 class="col-green">Loading Data...</h6></div></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-4 mb-0">
+                    <div class="row d-flex">
+                      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-0">
+                        <p>Total Item: {{ allUnApproveUserList.length }}</p>
+                      </div>
+                      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-0">
+                        <pagination-controls (pageChange) = "pagination = $event" class="float-right"></pagination-controls>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

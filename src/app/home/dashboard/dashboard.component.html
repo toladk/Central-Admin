@@ -1,0 +1,93 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Dashboard</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main" style="color: #0D9448 !important;">
+                <i class="fas fa-home" style="color: #0D9448;"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item active">Dashboard</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-sm-6">
+        <div class="info-box7 l-bg-purple order-info-box7">
+          <div class="info-box7-block">
+            <h6 class="m-b-20 mt-2" style="color: #fff">Total No Of Roles</h6>
+            <h2 class="text-right" style="color: #fff"><i class="fas fa-list-ol pull-left" style="color: #fff"></i><span>{{ allRoleList.length }}</span></h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-sm-6">
+        <div class="info-box7 l-bg-blue order-info-box7">
+          <div class="info-box7-block">
+            <h6 class="m-b-20 mt-2" style="color: #fff">Total No Of Applications</h6>
+            <h2 class="text-right" style="color: #fff"><i class="fab fa-node-js pull-left" style="color: #fff"></i><span>{{ allApplicationList.length }}</span></h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-3 col-sm-6">
+        <div class="info-box7 l-bg-purple order-info-box7">
+          <div class="info-box7-block">
+            <h6 class="m-b-20 mt-2" style="color: #fff">No Of Branches</h6>
+            <h2 class="text-right" style="color: #fff"><i class="fab fa-hubspot pull-left" style="color: #fff"></i><span>{{ allBranchList.length }}</span></h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="info-box7 l-bg-blue order-info-box7">
+          <div class="info-box7-block">
+            <h6 class="m-b-20 mt-2" style="color: #fff">No Of Users</h6>
+            <h2 class="text-right" style="color: #fff"><i class="fas fa-user-alt pull-left" style="color: #fff"></i><span>{{ allUserList.length }}</span></h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="info-box7 l-bg-green order-info-box7">
+          <div class="info-box7-block">
+            <h6 class="m-b-20 mt-2" style="color: #fff">No Of Approved Roles</h6>
+            <h2 class="text-right" style="color: #fff"><i class="far fa-check-circle pull-left" style="color: #fff"></i><span>{{ allApprovedRoleList.length }}</span></h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="info-box7 l-bg-orange order-info-box7">
+          <div class="info-box7-block">
+            <h6 class="m-b-20 mt-2" style="color: #fff">No Of Tellers</h6>
+            <h2 class="text-right" style="color: #fff"><i class="fas fa-book-open pull-left" style="color: #fff"></i><span>{{ allUnApproveTellerList.length }}</span></h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6 col-sm-6">
+        <div class="info-box7 l-bg-green order-info-box7">
+          <div class="info-box7-block">
+            <h6 class="m-b-20 mt-2" style="color: #fff">No of Unapproved Roles</h6>
+            <h2 class="text-right" style="color: #fff"><i class="fas fa-exclamation-circle pull-left" style="color: #fff"></i><span>{{ allUnApproveRoleList.length }}</span></h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-sm-6">
+        <div class="info-box7 l-bg-orange order-info-box7">
+          <div class="info-box7-block">
+            <h6 class="m-b-20 mt-2" style="color: #fff">No Of Unapproved Users</h6>
+            <h2 class="text-right" style="color: #fff"><i class="fas fa-user-alt-slash pull-left" style="color: #fff"></i><span>{{ allUnApproveUserList.length }}</span></h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

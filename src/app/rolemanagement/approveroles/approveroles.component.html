@@ -1,0 +1,86 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Role Management</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/home/dashboard">
+                <i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item active">Approve Roles</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-4">
+        <div class="card">
+          <div class="body">
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="ngxTableHeader">
+                  <ul class="header-buttons-left ml-0 mb-0">
+                    <li class="dropdown m-l-20">
+                      <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                      <input placeholder="Search" [(ngModel)]="sortingName" (input)="SearchByName()" type="text"
+                       class="browser-default search-field" aria-label="Search box">
+                    </li>
+                  </ul>
+                  <ul class="header-buttons m-r-20">
+                    <li>
+                      <div class="icon-button-demo">
+                        <!-- <button mat-mini-fab color="primary" #tooltip="matTooltip" matTooltip="Add New Role" matTooltipPosition="before">
+                          <mat-icon class="col-white">add</mat-icon>
+                        </button> -->
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="body table-responsive p-0 mt-3">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th (click)="sort('roleName')" style="cursor: pointer;">Role Name<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('permissions.name')" style="cursor: pointer;">Permissions<i class="fas fa-sort ml-2"></i></th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let list of allUnApproveRoleList | orderBy: key: reverse | paginate: {itemsPerPage: 15 , currentPage: pagination}; let i = index">
+                        <th scope="row">{{ i+1}}</th>
+                        <td>{{ list.roleName }}</td>
+                        <!-- <td>{{ list.permissions.name }}</td> -->
+                        <td>
+                          <p *ngFor="let perm of list.permissions">{{ perm.name }}</p>
+                        </td>
+                        <td>
+                          <div class="badge shadow-style col-green" style="cursor: pointer;" (click)="approveRole(list)"><i class="fas fa-check mr-2"></i>Approve Role</div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-4 mb-0">
+                    <div class="row d-flex">
+                      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-0">
+                        <p>Total Item: {{ allUnApproveRoleList.length }}</p>
+                      </div>
+                      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-0">
+                        <pagination-controls (pageChange) = "pagination = $event" class="float-right"></pagination-controls>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

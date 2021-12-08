@@ -1,0 +1,234 @@
+<style>
+  @keyframes loader-animation {
+     0% {
+         left: -100%;
+     }
+     49% {
+         left: 100%;
+     }
+     50% {
+         left: 100%;
+     }
+     100% {
+         left: -100%;
+     }
+ }
+ .loader {
+     height: 3px;
+     width: 100%;
+     overflow: hidden;
+ }
+ .loader .bar {
+     position: relative;
+     height: 5px;
+     width: 100%;
+     background-color: #57B952;
+     animation-name: loader-animation;
+     animation-duration: 3s;
+     animation-iteration-count: infinite;
+     animation-timing-function: ease-in-out;
+ }
+</style>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Transaction Log</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/home/dashboard" style="color: #0D9448 !important;">
+                <i class="fas fa-home" style="color: #0D9448;"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item active">Transaction Log</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-4">
+        <div class="card">
+          <div class="body">
+            <form [formGroup]="transactionLogForm" (ngSubmit)="gettransactionLog()">
+              <div class="row ">
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12 mb-0">
+                  <mat-form-field class="example-full-width mt-3">
+                    <mat-label>Application Name</mat-label>
+                    <input matInput formControlName="applicationName">
+                    <mat-error *ngIf="transactionLogForm.get('applicationName').hasError('required')">
+                      Application Name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-xs-12 mb-0">
+                  <mat-form-field class="example-full-width mt-3">
+                    <mat-label>Application Identifier</mat-label>
+                    <input matInput formControlName="identifier">
+                    <mat-error *ngIf="transactionLogForm.get('identifier').hasError('required')">
+                      Identifier is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-xs-12 mb-0">
+                  <mat-form-field class="example-full-width mt-3">
+                    <mat-label>Choose Start date</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="startDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error *ngIf="transactionLogForm.get('startDate').hasError('required')">
+                      Start Date is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-xs-12 mb-0">
+                  <mat-form-field class="example-full-width mt-3">
+                    <mat-label>Choose End date</mat-label>
+                    <input matInput [matDatepicker]="picker2" formControlName="endDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                    <mat-error *ngIf="transactionLogForm.get('endDate').hasError('required')">
+                      End Date is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-xs-12 mb-0">
+                  <div class="badge shadow-style col-green m-t-25 ml-2" style="cursor: pointer;" (click)="reloadPage()">
+                    <i class="fas fa-sync mr-2"></i>Clear Filter</div>
+                </div>
+                <div class="col-xl-1 col-lg-6 col-md-6 col-sm-6 col-xs-12 mb-0">
+                  <div class="icon-button-demo float-right m-t-15">
+                    <button mat-mini-fab color="primary" #tooltip="matTooltip" [disabled]="!transactionLogForm.valid" matTooltip="Get Report" matTooltipPosition="before" type="submit">
+                      <i class="fas fa-file-download"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+            <div class="row ">
+              <div class="col-xl-1 col-lg-6 col-md-6 col-sm-6 col-xs-12 mb-0 mt-2">
+                <mat-bar-button *ngIf="isShown" [options]="barButtonOptions" (btnClick)="downloadData()">
+                </mat-bar-button>
+              </div>
+            </div>
+            </div>
+        </div>
+
+
+
+        <div class="card">
+          <div class="body">
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="ngxTableHeader">
+                  <ul class="header-buttons-left ml-0 mb-0">
+                    <li class="dropdown m-l-20">
+                      <label for="search-input"><i class="fas fa-search ml-2 search-icon mt-2"></i></label>
+                      <input placeholder="Search" [(ngModel)]="sortingName" (input)="SearchByName()" type="text"
+                       class="browser-default search-field" aria-label="Search box">
+                    </li>
+                  </ul>
+                  <ul class="header-buttons m-r-20">
+                    <li>
+                      <!-- <div class="icon-button-demo">
+                        <button mat-mini-fab color="primary" #tooltip="matTooltip" matTooltip="Add New Branch" matTooltipPosition="before">
+                          <i class="fas fa-plus" style="color: #fff;"></i>
+                        </button>
+                      </div> -->
+                    </li>
+                  </ul>
+                </div>
+                <!-- Loader -->
+                <!-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 pl-0 pr-0 mx-auto mt-3">
+                  <div class="loader" *ngIf="loader">
+                    <div class="bar"></div>
+                  </div>
+                </div> -->
+                <!--End Loader-->
+                <div class="body table-responsive p-0 mt-3" *ngIf="this.allTransactionLogList.length > 0">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th (click)="sort('amount')" style="cursor: pointer;">Amount<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('applicationName')" style="cursor: pointer;">Application Name<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('creditAccount')" style="cursor: pointer;">Credit Account<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('dateOfInitiation')" style="cursor: pointer;">Date of Initiation<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('debitAccount')" style="cursor: pointer;">Debit Account<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('identifier')" style="cursor: pointer;">Identifier<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('initiatedBy')" style="cursor: pointer;">Initiated By<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('operationExecuted')" style="cursor: pointer;">Operation Executed<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('transactionStatus')" style="cursor: pointer;">Transaction Status<i class="fas fa-sort ml-2"></i></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let list of allTransactionLogList | orderBy: key: reverse | paginate: {itemsPerPage: 15 , currentPage: pagination}; let i = index">
+                        <th>{{ list.amount }}</th>
+                        <td>{{ list.applicationName }}</td>
+                        <td>{{ list.creditAccount }}</td>
+                        <td>{{ list.dateofInitiation | date }}</td>
+                        <td>{{ list.debitAccount }}</td>
+                        <td>{{ list.identifier }}</td>
+                        <td>{{ list.initiatedBy }}</td>
+                        <td>{{ list.operationExecuted }}</td>
+                        <td>{{ list.transactionStatus }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-4 mb-0">
+                    <div class="row d-flex">
+                      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-0">
+                        <p>Total Item: {{ allTransactionLogList.length }}</p>
+                      </div>
+                      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-0">
+                        <pagination-controls (pageChange) = "pagination = $event" class="float-right"></pagination-controls>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="body table-responsive p-0 mt-3" *ngIf="this.allTransactionLogList.length < 1">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th (click)="sort('amount')" style="cursor: pointer;">Amount<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('applicationName')" style="cursor: pointer;">Application Name<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('creditAccount')" style="cursor: pointer;">Credit Account<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('dateOfInitiation')" style="cursor: pointer;">Date of Initiation<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('debitAccount')" style="cursor: pointer;">Debit Account<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('identifier')" style="cursor: pointer;">Identifier<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('initiatedBy')" style="cursor: pointer;">Initiated By<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('operationExecuted')" style="cursor: pointer;">Operation Executed<i class="fas fa-sort ml-2"></i></th>
+                        <th (click)="sort('transactionStatus')" style="cursor: pointer;">Transaction Status<i class="fas fa-sort ml-2"></i></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td colspan="10" class="text-center"><div class="mt-3 mb-3 font-23"><h6 class="col-green">Click <b>Get Report Icon</b> to get data</h6></div></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-4 mb-0">
+                    <div class="row d-flex">
+                      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-0">
+                        <p>Total Item: {{ allTransactionLogList.length }}</p>
+                      </div>
+                      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-0">
+                        <pagination-controls (pageChange) = "pagination = $event" class="float-right"></pagination-controls>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+

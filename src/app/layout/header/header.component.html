@@ -1,0 +1,61 @@
+<nav #navbar class="navbar active">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a href="#" class="navbar-toggle collapsed" (click)="isNavbarCollapsed = !isNavbarCollapsed" aria-expanded="false"></a>
+            <a class="bars" (click)="mobileMenuSidebarOpen($event,'overlay-open')"></a>
+            <a class="navbar-brand" [routerLink]="['/home/dashboard']">
+                <img src="assets/images/logo.png" alt="" />
+                <span class="logo-name">Heritage Bank</span>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" [ngbCollapse]="isNavbarCollapsed">
+            <ul class="pull-left collapse-menu-icon">
+                <li>
+                    <button mat-icon-button (click)="callSidemenuCollapse()" class="sidemenu-collapse">
+            <i class="fas fa-bars mt-2" style="color: #0D9448;"></i>
+          </button>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <!-- Full Screen Button -->
+                <li class="fullscreen">
+                    <button mat-icon-button (click)="callFullscreen()" class=" nav-notification-icons">
+            <i class="fas fa-expand mt-2" style="color: #0D9448;"></i>
+          </button>
+                </li>
+                <li class="nav-item user_profile" ngbDropdown>
+                    <a href="" onClick="return false;" ngbDropdownToggle role="button" class="nav-notification-icons pt-0 d-flex">
+                        <i class="fas fa-user mt-2 mr-1"></i>
+                        <p class="mt-2 ml-1" style="font-weight: 500;">{{ usernameResult?.username }}</p>
+                    </a>
+                    <div ngbDropdownMenu class="notification-dropdown pullDown">
+                        <div class="noti-list" style="position: relative; max-width: 600px; max-height: 300px;" [perfectScrollbar]>
+                            <ul class="menu">
+                                <li class="body">
+                                    <ul class="user_dw_menu">
+                                        <!-- <li>
+                      <a href="" style="color: #57B952;">
+                        <mat-icon aria-hidden="false" class="mr-2">person</mat-icon>Profile
+                      </a>
+                    </li> -->
+                                        <li>
+                                            <a href="" (click)="LogOut()" style="color: #57B952;">
+                                                <i class="fas fa-power-off mr-2" style="color: #0D9448;"></i>Logout
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <!-- #END# Tasks -->
+                <li class="pull-right">
+                    <button mat-icon-button (click)="toggleRightSidebar()" class="nav-notification-icons js-right-sidebar">
+            <i class="fas fa-cog mt-2" id="settingBtn" style="color: #0D9448;"></i>
+          </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

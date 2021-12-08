@@ -1,0 +1,270 @@
+<style>
+    @keyframes loader-animation {
+        0% {
+            left: -100%;
+        }
+        49% {
+            left: 100%;
+        }
+        50% {
+            left: 100%;
+        }
+        100% {
+            left: -100%;
+        }
+    }
+    
+    .loader {
+        height: 3px;
+        width: 100%;
+        overflow: hidden;
+    }
+    
+    .loader .bar {
+        position: relative;
+        height: 5px;
+        width: 100%;
+        background-color: #57B952;
+        animation-name: loader-animation;
+        animation-duration: 3s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+    }
+</style>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Role Management</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/home/dashboard" style="color: #0D9448 !important;">
+                                <i class="fas fa-home" style="color: #0D9448;"></i> Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">All Roles</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-4">
+                <div class="card">
+                    <div class="body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="ngxTableHeader">
+                                    <ul class="header-buttons-left ml-0 mb-0">
+                                        <li class="dropdown m-l-20">
+                                            <label for="search-input"><i class="fas fa-search ml-2 search-icon mt-2"></i></label>
+                                            <input placeholder="Search" [(ngModel)]="sortingName" (input)="SearchByName()" type="text" class="browser-default search-field" aria-label="Search box">
+                                        </li>
+                                    </ul>
+                                    <ul class="header-buttons m-r-20">
+                                        <li>
+                                            <div class="icon-button-demo">
+                                                <button mat-mini-fab color="primary" #tooltip="matTooltip" matTooltip="Add New Role" matTooltipPosition="before" *ngIf="permissionList.indexOf('CANCREATEROLE') > -1" (click)="open()">
+                          <i class="fas fa-plus" style="color: #fff;"></i>
+                        </button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- Loader -->
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 pl-0 pr-0 mx-auto mt-3">
+                                    <div class="loader" *ngIf="loader">
+                                        <div class="bar"></div>
+                                    </div>
+                                </div>
+                                <!--End Loader-->
+                                <div class="body table-responsive p-0 mt-3" *ngIf="this.allRoleList.length > 0">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th (click)="sort('roleName')" style="cursor: pointer;">Role Name<i class="fas fa-sort ml-2"></i></th>
+                                                <th (click)="sort('applicationName')" style="cursor: pointer;">Apllication Name<i class="fas fa-sort ml-2"></i></th>
+                                                <th (click)="sort('dateCreated')" style="cursor: pointer;">Date Created<i class="fas fa-sort ml-2"></i></th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let list of allRoleList | orderBy: key: reverse | paginate: {itemsPerPage: 15 , currentPage: pagination}; let i = index">
+                                                <th scope="row">{{ i+1}}</th>
+                                                <td>{{ list.roleName }}</td>
+                                                <td>{{ list.applicationName }}</td>
+                                                <td>{{ list.dateCreated | date }}</td>
+                                                <td>
+                                                    <div class="badge shadow-style col-green mr-3" style="cursor: pointer;" *ngIf="permissionList.indexOf('CANVIEWALLPERMISSIONS') > -1" (click)="getRoleById(list.id)"><i class="fas fa-eye mr-2"></i>View Permissions</div>
+                                                    <div class="badge shadow-style col-orange" style="cursor: pointer;" *ngIf="permissionList.indexOf('CANASSIGNPERMISSIONSTOROLE') > -1" (click)="updatePerm(list)"><i class="fas fa-edit mr-2"></i>Update Role</div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-4 mb-0">
+                                        <div class="row d-flex">
+                                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-0">
+                                                <p>Total Item: {{ allRoleList.length }}</p>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-0">
+                                                <pagination-controls (pageChange)="pagination = $event" class="float-right"></pagination-controls>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="body table-responsive p-0 mt-3" *ngIf="this.allRoleList.length < 1">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th (click)="sort('roleName')" style="cursor: pointer;">Role Name<i class="fas fa-sort ml-2"></i></th>
+                                                <th (click)="sort('applicationName')" style="cursor: pointer;">Apllication Name<i class="fas fa-sort ml-2"></i></th>
+                                                <th (click)="sort('dateCreated')" style="cursor: pointer;">Date Created<i class="fas fa-sort ml-2"></i></th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="7" class="text-center">
+                                                    <div class="mt-3 mb-3 font-23">
+                                                        <h6 class="col-green">Loading Data...</h6>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-4 mb-0">
+                                        <div class="row d-flex">
+                                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-0">
+                                                <p>Total Item: {{ allRoleList.length }}</p>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-0">
+                                                <pagination-controls (pageChange)="pagination = $event" class="float-right"></pagination-controls>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Drawer For Add Role-->
+<nz-drawer [nzBodyStyle]="{ overflow: 'auto' }" [nzMaskClosable]="true" [nzWidth]="570" [nzVisible]="visible" nzTitle="Create New Role" [nzFooter]="footerTpl" (nzOnClose)="close()">
+    <form nz-form *nzDrawerContent [formGroup]="roleForm">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Role Name</mat-label>
+                    <input matInput formControlName="roleName" id="roleName">
+                    <i class="fas fa-align-left" style="font-size: 20px;" matSuffix></i>
+                    <mat-error *ngIf="roleForm.get('roleName').hasError('whitespace')">
+                        Space is not allowed in Role Name
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <h6 class="mb-1 mt-4 text-center">Select Application for List of Permissions</h6>
+        <div class="row mt-3">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-3">
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>List Of Applications</mat-label>
+                    <mat-select formControlName="applicationId" id="applicationId" type="text">
+                        <mat-option *ngFor="let list of allApplicationList" [value]="list.id" (click)="getApplicationNamePermissions(list)">{{list.applicationName}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="roleForm.get('applicationId').hasError('required')">
+                        Application Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <h6 class="mb-4 mt-3 text-center">List of Permission Group</h6>
+        <div class="row mt-3">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <section>
+                    <div *ngFor="let list of applicationPermission" class="mb-3">
+                        <input class="mt-1 mr-2" type="checkbox" [value]="list" (change)="onChange(list, $event.target.checked)" /> {{ list.name }}
+                    </div>
+                </section>
+            </div>
+        </div>
+    </form>
+
+    <ng-template #footerTpl>
+        <div style="float: right">
+            <button nz-button style="margin-right: 8px;" (click)="close()">Cancel</button>
+            <button nz-button nzType="primary" style="background: #57B952; border-color: #57B952;" (click)="createRole()">Submit</button>
+        </div>
+    </ng-template>
+</nz-drawer>
+
+<!-- Drawer for Edit Permission-->
+<nz-drawer [nzBodyStyle]="{ overflow: 'auto' }" [nzMaskClosable]="true" [nzWidth]="570" [nzVisible]="visible2" nzTitle="Edit Permission" (nzOnClose)="closeEdit()">
+
+    <form nz-form *nzDrawerContent [formGroup]="roleForm">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Role Name</mat-label>
+                    <input matInput formControlName="roleName" readonly>
+                    <i class="fas fa-align-left" style="font-size: 20px;" matSuffix></i>
+                    <mat-error *ngIf="roleForm.get('applicationId').hasError('required')">
+                        Role Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <h6 class="mb-4 mt-5 text-center">List of Permission Group</h6>
+        <div class="row mt-3">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <section>
+                    <div *ngFor="let list of applicationPermission" class="mb-3">
+                        <input class="mt-1 mr-2" type="checkbox" [checked]="list.isChecked" [value]="list.id" (change)="onChange(list, $event.target.checked)" /> {{ list.name }}
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="container-auth-form-btn mt-5">
+            <button mat-flat-button color="primary" class="auth-form-btn" type="submit" (click)="updatePermission()">
+          Update Permission
+        </button>
+        </div>
+    </form>
+
+</nz-drawer>
+
+<!-- Drawer for View Permission-->
+<nz-drawer [nzBodyStyle]="{ overflow: 'auto' }" [nzMaskClosable]="true" [nzWidth]="570" [nzVisible]="visible3" nzTitle="View Permission" (nzOnClose)="closeEditViewPerm()">
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header bg-green">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12">
+                            -- List Of Permissions --
+                        </div>
+                    </div>
+                </div>
+                <div class="body">
+                    <h6 class="list-group-item-heading mt-2 mb-3"></h6>
+                    <ol *ngFor="let role of roleByIdList">
+                        <li><span><i class="fas fa-check mr-2"></i></span>{{ role.name }}</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</nz-drawer>
